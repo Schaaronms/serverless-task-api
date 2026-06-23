@@ -1,68 +1,161 @@
-Serverless Task APIUma API RESTful serverless para gerenciamento de tarefas, projetada para alta disponibilidade e escalabilidade linear.
-A infraestrutura é totalmente automatizada como código (IaC) utilizando Terraform, com deploy contínuo via pipelines de CI/CD.
-O principal objetivo deste projeto é consolidar e demonstrar práticas recomendadas de nível de produção no ecossistema AWS e ferramentas modernas de DevOps.
-🏗️ Arquitetura do SistemaO fluxo abaixo ilustra desde o commit do desenvolvedor até o monitoramento da aplicação em produção:Snippet de códigograph TD
-    A[GitHub Actions] -->|Build & Push| B(AWS ECR)
-    B -->|Deploy Container| C(AWS Lambda)
-    D[Client] -->|HTTPS Request| E(API Gateway)
-    E -->|Auth| F(Amazon Cognito)
-    E -->|Trigger| C
-    C -->|Persistência| G(Amazon DynamoDB)
-    C -->|Observabilidade| H(CloudWatch & X-Ray)
-🛠️ Tecnologias & Stack TécnicaTecnologiaCategoriaFinalidade no ProjetoAWS LambdaComputeExecução serverless do core da aplicaçãoTerraformIaCProvisionamento e versionamento de 
-toda a infraestruturaDynamoDBDatabaseArmazenamento NoSQL de baixa latência para as tarefasAPI GatewayNetworkingExposição dos endpoints REST e roteamento de requisiçõesCognitoSecurityAutenticação,
-autorização e gerenciamento de usuários (JWT)Docker / ECRContainerizationEmpacotamento da Lambda em container e registro de imagensGitHub ActionsCI/CDPipeline automatizado de lint, testes e deploy 
-(Infra + Code)CloudWatchObservabilityCentralização de logs de execução e métricas de performanceAWS X-RayObservabilityRastreamento distribuído (tracing) para análise de gargalos
+# 🚀 Serverless Task API
 
-🛣️ Roadmap de Desenvolvimento
-✅ Etapa 1: Fundação
+Uma API RESTful serverless para gerenciamento de tarefas, projetada para alta disponibilidade e escalabilidade. A infraestrutura é provisionada utilizando Infrastructure as Code (IaC) com Terraform e segue boas práticas do ecossistema AWS.
 
-[x] Configuração da AWS CLI.
-[x] Configuração do backend remoto Terraform em S3.
-[x] Provisionamento de infraestrutura com Terraform.
-[x] Criação e execução de função AWS Lambda.
-[x] Gerenciamento de permissões com IAM Roles.
+O objetivo deste projeto é consolidar conhecimentos em Cloud Computing, Serverless, DevOps e Observabilidade através da construção de uma aplicação real utilizando serviços AWS.
 
-🚧 Etapa 2: API Serverless
+---
 
-[ ] Criação da tabela tasks no DynamoDB.
-[ ] Desenvolvimento das funções CRUD de tarefas.
-[ ] Integração Lambda + DynamoDB.
-[ ] Exposição da API via API Gateway.
-[ ] Testes funcionais dos endpoints.
+# 🏗️ Arquitetura do Sistema
 
-🚧 Etapa 3: Segurança e Deploy
+```text
+GitHub
+   │
+   ▼
+GitHub Actions
+   │
+   ▼
+Terraform
+   │
+   ▼
+AWS API Gateway
+   │
+   ▼
+AWS Lambda
+   │
+   ▼
+Amazon DynamoDB
+   │
+   ├── CloudWatch
+   └── X-Ray
+```
 
-[ ] Autenticação utilizando Amazon Cognito.
-[ ] Containerização com Docker.
-[ ] Registro de imagens no Amazon ECR.
-[ ] Pipeline CI/CD com GitHub Actions.
+---
 
-🚧 Etapa 4: Observabilidade
+# 🛠️ Tecnologias Utilizadas
 
-[ ] Centralização de logs no CloudWatch.
-[ ] Dashboards de monitoramento.
-[ ] Tracing distribuído com AWS X-Ray.
-[ ] Alarmes e métricas operacionais.
+| Tecnologia      | Categoria              | Finalidade                        |
+| --------------- | ---------------------- | --------------------------------- |
+| AWS Lambda      | Compute                | Execução serverless da aplicação  |
+| Terraform       | Infrastructure as Code | Provisionamento da infraestrutura |
+| Amazon DynamoDB | Database               | Armazenamento NoSQL               |
+| API Gateway     | Networking             | Exposição da API REST             |
+| Amazon Cognito  | Security               | Autenticação e autorização        |
+| Docker          | Containers             | Empacotamento da aplicação        |
+| Amazon ECR      | Containers             | Registro de imagens               |
+| GitHub Actions  | CI/CD                  | Automação de deploy               |
+| CloudWatch      | Observability          | Logs e métricas                   |
+| AWS X-Ray       | Observability          | Tracing distribuído               |
 
-## Competências Desenvolvidas
+---
 
-* ✅ Terraform modularizado para Infrastructure as Code
-* ✅ Backend remoto no Amazon S3
-* ✅ AWS Lambda para arquiteturas serverless
-* ✅ Integração Lambda + DynamoDB
-* ✅ API Gateway para exposição de APIs REST
+# 📂 Estrutura do Projeto
+
+```text
+serverless-task-api/
+├── src/
+│   ├── handlers/
+│   │   ├── createTask.js
+│   │   ├── listTasks.js
+│   │   ├── getTask.js
+│   │   ├── updateTask.js
+│   │   └── deleteTask.js
+│   └── lib/
+│       ├── dynamo.js
+│       └── response.js
+│
+├── terraform/
+│   ├── backend.tf
+│   ├── main.tf
+│   └── modules/
+│       ├── dynamodb/
+│       └── api-gateway/
+│
+└── README.md
+```
+
+---
+
+# 🛣️ Roadmap
+
+## ✅ Etapa 1: Fundação
+
+* [x] Configuração da AWS CLI
+* [x] Configuração do backend remoto Terraform
+* [x] Provisionamento inicial da infraestrutura
+* [x] Criação da AWS Lambda
+* [x] Configuração de IAM Roles
+
+## ✅ Etapa 2: Persistência e CRUD
+
+* [x] Criação da tabela DynamoDB
+* [x] Modelagem Single Table Design
+* [x] Integração Lambda + DynamoDB
+* [x] Create Task
+* [x] List Tasks
+* [x] Get Task
+* [x] Update Task
+* [x] Delete Task
+
+## 🚧 Etapa 3: API Gateway
+
+* [x] Criação do módulo API Gateway
+* [x] Provisionamento da HTTP API
+* [ ] Integração API Gateway + Lambda
+* [ ] Criação das rotas REST
+* [ ] Testes dos endpoints
+
+## 🚧 Etapa 4: Segurança e CI/CD
+
+* [ ] Amazon Cognito JWT Authorizer
+* [ ] Docker
+* [ ] Amazon ECR
+* [ ] GitHub Actions
+* [ ] OIDC Federation
+* [ ] Deploy automatizado
+
+## 🚧 Etapa 5: Observabilidade
+
+* [ ] CloudWatch Logs
+* [ ] CloudWatch Dashboards
+* [ ] AWS X-Ray
+* [ ] Alarmes e métricas
+
+---
+
+# 🎯 Competências Desenvolvidas
+
+* ✅ Terraform Modularizado
+* ✅ Infrastructure as Code (IaC)
+* ✅ AWS Lambda
+* ✅ Amazon DynamoDB
+* ✅ CRUD Serverless
+* ✅ AWS SDK v3
+* ✅ API Gateway
+* ✅ Remote State no S3
 * ✅ State Locking com DynamoDB
-* ✅ GitHub Actions com OIDC
-* ✅ Cognito JWT Authorizer
-* ✅ CloudWatch Dashboards
-* ✅ X-Ray Tracing
+* ✅ Git e GitHub
+* ✅ Linux para administração e desenvolvimento
+* ✅ IAM Roles e Policies
+* ✅ Princípio do Menor Privilégio (PoLP)
+* ✅ Arquiteturas Serverless
 * ✅ Single Table Design
-* ✅ Docker e Amazon ECR
-* ✅ CI/CD automatizado
-* ✅ IAM Roles e Policies seguindo o Princípio do Menor Privilégio (PoLP)
-* ✅ Observabilidade e monitoramento de aplicações serverless
-* ✅ Versionamento e colaboração utilizando Git e GitHub
 
+---
 
-🧑‍💻 Autor Schaaron Souza
+# 📚 Próximos Aprendizados
+
+* 🚧 GitHub Actions com OIDC
+* 🚧 Cognito JWT Authorizer
+* 🚧 Docker e Amazon ECR
+* 🚧 CloudWatch Dashboards
+* 🚧 AWS X-Ray
+* 🚧 Observabilidade em aplicações serverless
+
+---
+
+# 🧑‍💻 Autora
+
+**Schaaron Souza**
+
+Em formação contínua em Cloud Computing, DevOps e Desenvolvimento de Software, com foco em AWS, Terraform, Linux e Arquiteturas Serverless.
