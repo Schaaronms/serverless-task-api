@@ -4,6 +4,12 @@
 *.tfstate.*
 .terraform.lock.hcl
 
+# Lambda
+*.zip
+
+# Node
+node_modules/
+
 # AWS
 *.pem
 
