@@ -36,3 +36,11 @@ resource "aws_lambda_function" "api" {
 module "dynamodb" {
   source = "./modules/dynamodb"
 }
+
+module "api_gateway" {
+  source = "./modules/api-gateway"
+}
+
+output "api_endpoint" {
+  value = module.api_gateway.api_endpoint
+}
