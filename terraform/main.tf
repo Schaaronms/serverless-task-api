@@ -32,3 +32,7 @@ resource "aws_lambda_function" "api" {
   handler = "index.handler"
   runtime = "nodejs22.x"
 }
+
+module "dynamodb" {
+  source = "./modules/dynamodb"
+}
