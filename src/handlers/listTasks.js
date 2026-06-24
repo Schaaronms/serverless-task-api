@@ -1,27 +1,20 @@
-const { QueryCommand } = require("@aws-sdk/lib-dynamodb");
-const dynamo = require("../lib/dynamo");
-const response = require("../lib/response");
+const { QueryCommand } = require('@aws-sdk/lib-dynamodb');
+const { docClient } = require('../lib/dynamo');
+const { response } = require('../lib/response');
 
 exports.handler = async (event) => {
   try {
-    const userId = event.userId;
+    const userId = event.headers?.['x-user-id'] || 'anonymous';
 
-    const result = await dynamo.send(
-      new QueryCommand({
-        TableName: "tasks",
-        KeyConditionExpression: "userId = :userId",
-        ExpressionAttributeValues: {
-          ":userId": userId
-        }
-      })
-    );
+    const result = await docClient.send(new QueryCommand({
+      TableName: process.env.TABLE_NAME,
+      KeyConditionExpression: 'userId = :userId',
+      ExpressionAttributeValues: { ':userId': userId },
+    }));
 
-    return response(200, result.Items);
-  } catch (error) {
-    console.error(error);
-
-    return response(500, {
-      message: "Internal Server Error"
-    });
+    return response(200, { tasks: result.Items });
+  } catch (err) {
+    console.error(err);
+    return response(500, { message: 'Internal server error' });
   }
 };

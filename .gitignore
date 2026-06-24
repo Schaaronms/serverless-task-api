@@ -2,7 +2,7 @@
 .terraform/
 *.tfstate
 *.tfstate.*
-.terraform.lock.hcl
+# .terraform.lock.hcl NÃO deve ser ignorado — commite junto com o código
 
 # Lambda
 *.zip

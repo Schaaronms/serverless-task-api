@@ -1,36 +1,34 @@
-const { PutCommand } = require("@aws-sdk/lib-dynamodb");
-const dynamo = require("../lib/dynamo");
-const response = require("../lib/response");
+const { PutCommand } = require('@aws-sdk/lib-dynamodb');
+const { docClient } = require('../lib/dynamo');
+const { response } = require('../lib/response');
 
 exports.handler = async (event) => {
   try {
-    const body = JSON.parse(event.body || "{}");
+    const userId = event.headers?.['x-user-id'] || 'anonymous';
+    const body = JSON.parse(event.body || '{}');
 
+    if (!body.title) {
+      return response(400, { message: 'title is required' });
+    }
+
+    const now = new Date().toISOString();
     const item = {
-      userId: body.userId,
-      taskId: body.taskId,
+      userId,
+      taskId: crypto.randomUUID(),
       title: body.title,
-      status: "pending",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      status: body.status || 'pending',
+      createdAt: now,
+      updatedAt: now,
     };
 
-    await dynamo.send(
-      new PutCommand({
-        TableName: "tasks",
-        Item: item
-      })
-    );
+    await docClient.send(new PutCommand({
+      TableName: process.env.TABLE_NAME,
+      Item: item,
+    }));
 
-    return response(201, {
-      message: "Task created",
-      task: item
-    });
-  } catch (error) {
-    console.error(error);
-
-    return response(500, {
-      message: "Internal Server Error"
-    });
+    return response(201, item);
+  } catch (err) {
+    console.error(err);
+    return response(500, { message: 'Internal server error' });
   }
 };
